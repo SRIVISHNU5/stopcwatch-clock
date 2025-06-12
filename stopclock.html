@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clock + Stopwatch</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Segoe UI", sans-serif;
+        background: linear-gradient(to right, #74ebd5, #9face6);
+      }
+
+      .container {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px 30px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        color: #fff;
+        width: 90%;
+        max-width: 400px;
+      }
+
+      h1 {
+        margin-bottom: 20px;
+        font-weight: 600;
+        font-size: 1.8rem;
+        color: #fff;
+      }
+
+      .time-display,
+      .stopwatch-display {
+        font-size: 2.5rem;
+        margin: 20px 0;
+        font-weight: bold;
+      }
+
+      .buttons {
+        margin-top: 20px;
+      }
+
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      button.start {
+        background-color: #28a745;
+      }
+
+      button.start:hover {
+        background-color: #218838;
+      }
+
+      button.stop {
+        background-color: #dc3545;
+      }
+
+      button.stop:hover {
+        background-color: #c82333;
+      }
+
+      button.reset {
+        background-color: #007bff;
+      }
+
+      button.reset:hover {
+        background-color: #0069d9;
+      }
+
+      @media (max-width: 500px) {
+        .container {
+          padding: 30px 20px;
+        }
+
+        .time-display,
+        .stopwatch-display {
+          font-size: 2rem;
+        }
+
+        button {
+          width: 100%;
+          margin: 8px 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🕒 Clock + Stopwatch</h1>
+      <div class="time-display" id="clock">--:--:--</div>
+      <div class="stopwatch-display" id="stopwatch">00:00:00</div>
+      <div class="buttons">
+        <button class="start" onclick="startStopwatch()">Start</button>
+        <button class="stop" onclick="stopStopwatch()">Stop</button>
+        <button class="reset" onclick="resetStopwatch()">Reset</button>
+      </div>
+    </div>
+
+    <script>
+      // Clock
+      function updateClock() {
+        const now = new Date();
+        const time = now.toLocaleTimeString();
+        document.getElementById("clock").textContent = time;
+      }
+      setInterval(updateClock, 1000);
+      updateClock();
+
+      // Stopwatch
+      let stopwatchInterval;
+      let elapsedSeconds = 0;
+      let running = false;
+
+      function updateStopwatch() {
+        const hrs = String(Math.floor(elapsedSeconds / 3600)).padStart(2, "0");
+        const mins = String(Math.floor((elapsedSeconds % 3600) / 60)).padStart(
+          2,
+          "0"
+        );
+        const secs = String(elapsedSeconds % 60).padStart(2, "0");
+        document.getElementById(
+          "stopwatch"
+        ).textContent = `${hrs}:${mins}:${secs}`;
+      }
+
+      function startStopwatch() {
+        if (running) return;
+        running = true;
+        stopwatchInterval = setInterval(() => {
+          elapsedSeconds++;
+          updateStopwatch();
+        }, 1000);
+      }
+
+      function stopStopwatch() {
+        clearInterval(stopwatchInterval);
+        running = false;
+      }
+
+      function resetStopwatch() {
+        stopStopwatch();
+        elapsedSeconds = 0;
+        updateStopwatch();
+      }
+    </script>
+  </body>
+</html>
